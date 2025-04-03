@@ -1,9 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getUserById, updateUser, deleteUser } from '@/lib/db';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+// ✅ Correct GET request handler
+export async function GET(request: NextRequest, context: { params: { id: string } }) {
   try {
-    const user = await getUserById(params.id);
+    const user = await getUserById(context.params.id);
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
@@ -13,7 +14,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+// ✅ Correct PUT request handler
+export async function PUT(request: NextRequest, context: { params: { id: string } }) {
   try {
     const body = await request.json();
     const { name, email, age } = body;
@@ -22,16 +24,17 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
     }
 
-    const updatedUser = await updateUser(params.id, name, email, age);
+    const updatedUser = await updateUser(context.params.id, name, email, age);
     return NextResponse.json(updatedUser);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+// ✅ Correct DELETE request handler
+export async function DELETE(request: NextRequest, context: { params: { id: string } }) {
   try {
-    await deleteUser(params.id);
+    await deleteUser(context.params.id);
     return NextResponse.json({ message: 'User deleted' });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
