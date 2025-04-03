@@ -15,10 +15,13 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
-    const { name, email, age } = await request.json();
+    const body = await request.json();
+    const { name, email, age } = body;
+
     if (!name || !email || !age) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
     }
+
     const updatedUser = await updateUser(params.id, name, email, age);
     return NextResponse.json(updatedUser);
   } catch (error: any) {

@@ -43,7 +43,7 @@ export default function UserTable({ initialUsers }: { initialUsers: any[] }) {
                 </button>
                 <button
                   className={styles.deleteButton}
-                  onClick={() => {/* Add delete logic here */}}
+                  onClick={() => {() => dispatch(deleteUser(user.id))}}
                 >
                   Delete
                 </button>
